@@ -43,11 +43,6 @@
       //used to prevent play events on IOS7 and Android > 4.2 until the user has clicked the player
       this.playVideoIsAllowed = !(this.isIos || this.isAndroid);
 
-      // autoplay is disabled for mobile
-      if (this.isIos || this.isAndroid) {
-        this.player_.options()['autoplay'] = false;
-      }
-
       // Copy the JavaScript options if they exists
       if(typeof options['source'] !== 'undefined') {
         for(var key in options['source']) {
@@ -614,6 +609,10 @@
     this.ytplayer = new YT.Player(this.id_, {
       events: {
         onReady: function(e) {
+          if(self.player_.options()['autoplay']) {
+            e.target.playVideo();
+          }
+          
           e.target.vjsTech.onReady();
           self.player_.trigger('ratechange');
         },
